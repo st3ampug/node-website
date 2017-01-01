@@ -1,0 +1,72 @@
+.myFloat_Right {
+    float: right;
+}
+.myExtraPadding {
+    padding: 5px 0px 25px 5px;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+header .navbar {
+  border-radius: 0;
+  margin: 0;
+}
+
+.navbar-brand img {
+  content: url(../img/w-logo.png);
+  height: 20px;
+  /* something needs to be done about fitting it onto the bar */
+}
+
+.hero {
+  background-image: url(../img/bg-white-icons-l.png);
+  background-repeat: no-repeat;;
+  background-size: auto;
+  background-position: left top;
+  padding: 50px 0;
+  min-height: 650px;
+  position: relative;
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  text-align: center;
+  width: 100%;
+}
+
+.hero-content h2 {
+  color: #000;
+  font-size: 80px;
+}
+
+.hero-content p {
+  color: #FFF;
+  font-size: 40px;
+  margin-bottom: 30px;
+}
+
+.hero-content .btn {
+  border-radius: 2px;
+  padding: 20px 30px;
+}  
+
+main {
+  background-image: url(../img/bg-white-icons-l.png);
+  background-repeat: no-repeat;;
+  background-size: auto;
+  background-position: left top;
+  min-height: 500px;
+  padding: 50px 0;
+}
+
+footer {
+  padding: 30px 0;
+  font-size: 14px;
+  color: #BBB;
+  background: #222;
+  text-align: center;
+}

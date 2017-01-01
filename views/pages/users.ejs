@@ -1,0 +1,15 @@
+
+<%- contentFor('body') %>
+<div class="jumbotron text-center">
+  <h1>Available users</h1>
+</div>
+
+  <% for (item of items) { %>
+    <div class="row">
+      <div class="col-sm-3">
+        <h2><%= item.Name %></h2>
+      </div>
+    </div>
+  <% } %>
+
+<%- contentFor('employees') %>
