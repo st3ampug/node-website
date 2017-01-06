@@ -1,3 +1,7 @@
+tr[selected='selected'] {
+  background-color: chocolate;
+}
+
 .myFloat_Right {
     float: right;
 }
