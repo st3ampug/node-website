@@ -1,4 +1,5 @@
 // Variables ===========================================================================
+const updateDeviceAPI   = "http://localhost:3001/api/devices";
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
 const TABLEID           = "devicesTable";
@@ -7,11 +8,12 @@ const DROPDOWNULID      = "dropdownUsersList";
 const ASSIGNBUTTON      = "assignToUser";
 const USERCOOKIE        = "selected-user";
 const CARETSPAN         = "<span class='caret'></span>"
+const SUCCESS           = "success";
 
-var table = document.getElementById(TABLEID);
-var usersbutton = document.getElementById(DROPDOWNBUTTONID);
-var dropdown = document.getElementById(DROPDOWNULID);
-var assignbutton = document.getElementById(ASSIGNBUTTON);
+var table               = document.getElementById(TABLEID);
+var usersbutton         = document.getElementById(DROPDOWNBUTTONID);
+var dropdown            = document.getElementById(DROPDOWNULID);
+var assignbutton        = document.getElementById(ASSIGNBUTTON);
 
 var saveduser = "";
 var selecteduser = usersbutton.getAttribute("name");
@@ -32,6 +34,46 @@ window.onload = function() {
     }
 };
 
+assignbutton.addEventListener("click", function(ev) {
+    var trs = document.getElementsByTagName("tr");
+    var updated = false;
+    
+    if(trs.length > 1) {
+        var reqJsons = [];
+        for(var i = 1; i < trs.length; i++) {
+            if(trs[i].getAttribute("selected") != "no") {
+                var myJson = {
+                    "Serial": trs[i].getAttribute("id"),
+                    "DeviceName": trs[i].firstElementChild.innerText,
+                    "CurrentLocation": usersbutton.getAttribute("name")
+                }
+
+                reqJsons.push(myJson);
+            }
+        }
+
+        for(var j = 0; j < reqJsons.length; j++) {
+            // send request for updating each row
+            console.log("Request sent: " + reqJsons[j].Serial);
+
+            $.post(updateDeviceAPI, reqJsons[j],
+            function(data, status){
+                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+                if(j == reqJsons.length) {
+                    location.reload();
+                }
+            });
+            updated = true;
+        }
+    } else {
+        console.error("No devices were selected.");
+    }
+
+    if(updated) {
+        //reDrawElementJQuery("#" + TABLEID);
+    }
+});
+
 dropdown.addEventListener('click', function(ev) {
     if (ev.target !== ev.currentTarget) {
         var clickedItem = ev.target;
@@ -42,6 +84,7 @@ dropdown.addEventListener('click', function(ev) {
         }
     }
     $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+    changeAssignState();
 
     ev.stopPropagation();
 });
@@ -88,13 +131,19 @@ function checkUserName (name) {
 }
 
 function changeAssignState() {
-    var anyselected = false;
+    var devicesselected = false;
+    var userselected = false;
     var trs = table.getElementsByTagName("tr");
+    
     for(var i = 0; i < trs.length; i++) {
         if(trs[i].getAttribute("selected") == "selected")
-            anyselected = true;
+            devicesselected = true;
     }
-    if(anyselected)
+    if(selecteduser != null) {
+        userselected = true;
+    }
+
+    if(devicesselected && userselected)
         $('#assignToUser').removeClass("disabled");
     else
         $('#assignToUser').addClass("disabled");
@@ -133,5 +182,11 @@ function getCookie(cname) {
     }
     return "";
 }
+
+$.fn.redraw = function(){
+  $(this).each(function(){
+    var redraw = this.offsetHeight;
+  });
+};
 
 // =====================================================================================
