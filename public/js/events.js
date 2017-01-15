@@ -1,5 +1,6 @@
 // Variables ===========================================================================
 const updateDeviceAPI   = "http://localhost:3001/api/devices";
+
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
 const TABLEID           = "devicesTable";
@@ -32,7 +33,7 @@ window.onload = function() {
     setUserButtonText(saveduser);
     changeAssignState(ASSIGNBUTTON);
     changeReturnState(RETURNBUTTON);
-    //initDataTable(TABLEID);
+    initDataTableMinimal(TABLEID);
 
     var rows = document.getElementById(TABLEID).getElementsByTagName("tr");
     for(var i = 1; i < rows.length; i++) {
@@ -41,82 +42,90 @@ window.onload = function() {
 };
 
 assignbutton.addEventListener("click", function(ev) {
-    var trs = document.getElementsByTagName("tr");
-    var updated = false;
-    
-    if(trs.length > 1) {
-        var reqJsons = [];
-        for(var i = 1; i < trs.length; i++) {
-            if(trs[i].getAttribute("selected") != "no") {
-                var myJson = {
-                    "Serial": trs[i].getAttribute("id"),
-                    "DeviceName": trs[i].firstElementChild.innerText,
-                    "CurrentLocation": usersbutton.getAttribute("name")
-                }
+    if(!$('#' + ASSIGNBUTTON).hasClass('disabled')) {
+        var trs = document.getElementsByTagName("tr");
+        var updated = false;
+        
+        if(trs.length > 1) {
+            var reqJsons = [];
+            for(var i = 1; i < trs.length; i++) {
+                if(trs[i].getAttribute("selected") != "no") {
+                    var myJson = {
+                        "Serial": trs[i].getAttribute("id"),
+                        "DeviceName": trs[i].firstElementChild.innerText,
+                        "CurrentLocation": usersbutton.getAttribute("name")
+                    }
 
-                reqJsons.push(myJson);
+                    reqJsons.push(myJson);
+                }
             }
+
+            for(var j = 0; j < reqJsons.length; j++) {
+                // send request for updating each row
+                console.log("Request sent: " + reqJsons[j].Serial);
+
+                $.post(updateDeviceAPI, reqJsons[j],
+                function(data, status){
+                    console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+                    if(j == reqJsons.length) {
+                        location.reload();
+                    }
+                });
+                updated = true;
+            }
+        } else {
+            console.error("No devices were selected.");
         }
 
-        for(var j = 0; j < reqJsons.length; j++) {
-            // send request for updating each row
-            console.log("Request sent: " + reqJsons[j].Serial);
-
-            $.post(updateDeviceAPI, reqJsons[j],
-            function(data, status){
-                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-                if(j == reqJsons.length) {
-                    location.reload();
-                }
-            });
-            updated = true;
+        if(updated) {
+            //reDrawElementJQuery("#" + TABLEID);
         }
     } else {
-        console.error("No devices were selected.");
-    }
-
-    if(updated) {
-        //reDrawElementJQuery("#" + TABLEID);
+        console.log("button was disabled");
     }
 });
 
 returnbutton.addEventListener("click", function(ev) {
-    var trs = document.getElementsByTagName("tr");
-    var updated = false;
-    
-    if(trs.length > 1) {
-        var reqJsons = [];
-        for(var i = 1; i < trs.length; i++) {
-            if(trs[i].getAttribute("selected") != "no") {
-                var myJson = {
-                    "Serial": trs[i].getAttribute("id"),
-                    "DeviceName": trs[i].firstElementChild.innerText,
-                    "CurrentLocation": CHARGING
-                }
+    if(!$('#' + RETURNBUTTON).hasClass('disabled')) {
+        var trs = document.getElementsByTagName("tr");
+        var updated = false;
+        
+        if(trs.length > 1) {
+            var reqJsons = [];
+            for(var i = 1; i < trs.length; i++) {
+                if(trs[i].getAttribute("selected") != "no") {
+                    var myJson = {
+                        "Serial": trs[i].getAttribute("id"),
+                        "DeviceName": trs[i].firstElementChild.innerText,
+                        "CurrentLocation": CHARGING
+                    }
 
-                reqJsons.push(myJson);
+                    reqJsons.push(myJson);
+                }
             }
+
+            for(var j = 0; j < reqJsons.length; j++) {
+                // send request for updating each row
+                console.log("Request sent: " + reqJsons[j].Serial);
+
+                $.post(updateDeviceAPI, reqJsons[j],
+                function(data, status){
+                    console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+                    if(j == reqJsons.length) {
+                        location.reload();
+                    }
+                });
+                updated = true;
+            }
+        } else {
+            console.error("No devices were selected.");
         }
 
-        for(var j = 0; j < reqJsons.length; j++) {
-            // send request for updating each row
-            console.log("Request sent: " + reqJsons[j].Serial);
-
-            $.post(updateDeviceAPI, reqJsons[j],
-            function(data, status){
-                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-                if(j == reqJsons.length) {
-                    location.reload();
-                }
-            });
-            updated = true;
+        if(updated) {
+            //reDrawElementJQuery("#" + TABLEID);
         }
     } else {
-        console.error("No devices were selected.");
-    }
-
-    if(updated) {
-        //reDrawElementJQuery("#" + TABLEID);
+        console.log("button was disabled");
     }
 });
 
@@ -255,8 +264,16 @@ $.fn.redraw = function(){
   });
 };
 
-function initDataTable(id) {
+function initDataTableDefault(id) {
     $("#" + id).DataTable();
+}
+
+function initDataTableMinimal(id) {
+    $("#" + id).DataTable({
+        "paging":   false,
+        "ordering": true,
+        "info":     false
+    });
 }
 
 // =====================================================================================

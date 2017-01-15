@@ -2,10 +2,13 @@ tr[selected='selected'] {
   background-color: chocolate;
 }
 
-.myFloat_Right {
+.my-float-right {
     float: right;
 }
-.myExtraPadding {
+.my-float-left {
+    float: left;
+}
+.my-extra-padding {
     padding: 5px 0px 25px 5px;
 }
 
@@ -17,6 +20,10 @@ body {
 header .navbar {
   border-radius: 0;
   margin: 0;
+}
+
+header .extra-left-margin {
+  margin-left: 5px;
 }
 
 .navbar-brand img {

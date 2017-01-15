@@ -11,18 +11,25 @@
 </section>
 
 <%- contentFor('employees') %>
-<div class="row myExtraPadding">
+<div class="row my-extra-padding">
+
   <div class="col-sm-4">
-    <button type="button" class="btn btn-default" id="assignToUser">
-      <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Assign</button>
-    <button type="button" class="btn btn-default" id="returnItems">
-      <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Return</button>
+    <div class="my-float-left">
+      <button type="button" class="btn btn-default" id="assignToUser">
+        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span> Assign
+      </button>
+      <button type="button" class="btn btn-default" id="returnItems">
+        <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Return
+      </button>
+    </div>
   </div>
+
   <div class="col-sm-4">
 
   </div>
+
   <div class="col-sm-4">
-    <div class="dropdown myFloat_Right">
+    <div class="dropdown my-float-right">
       <button class="btn btn-default dropdown-toggle" type="button" id="dropdownUsersButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         Users
         <span class="caret"></span>
@@ -34,6 +41,7 @@
       </ul>
     </div>
   </div>
+
 </div>
 
 <%- contentFor('body') %>
@@ -52,6 +60,7 @@
           <th>Device Name</th>
           <th>OS</th>
           <th>Version</th>
+          <th>Notes</th>
           <th>Location</th>
         </tr>
       </thead>
@@ -61,6 +70,7 @@
           <td><%= item.DeviceName %></td>
           <td><%= item.OS %></td>
           <td><%= item.Version %></td>
+          <td><%= item.Notes %></td>
           <td id="location"><%= item.CurrentLocation %></td>
         </tr>
         <% } %>
