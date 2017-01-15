@@ -15,8 +15,12 @@
   <div class="col-sm-4">
     <button type="button" class="btn btn-default" id="assignToUser">
       <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Assign</button>
+    <button type="button" class="btn btn-default" id="returnItems">
+      <span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Return</button>
   </div>
-  <div class="col-sm-4"></div>
+  <div class="col-sm-4">
+
+  </div>
   <div class="col-sm-4">
     <div class="dropdown myFloat_Right">
       <button class="btn btn-default dropdown-toggle" type="button" id="dropdownUsersButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -57,7 +61,7 @@
           <td><%= item.DeviceName %></td>
           <td><%= item.OS %></td>
           <td><%= item.Version %></td>
-          <td><%= item.CurrentLocation %></td>
+          <td id="location"><%= item.CurrentLocation %></td>
         </tr>
         <% } %>
       </tbody>

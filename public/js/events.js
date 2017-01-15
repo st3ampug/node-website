@@ -6,14 +6,18 @@ const TABLEID           = "devicesTable";
 const DROPDOWNBUTTONID  = "dropdownUsersButton";
 const DROPDOWNULID      = "dropdownUsersList";
 const ASSIGNBUTTON      = "assignToUser";
+const RETURNBUTTON      = "returnItems";
 const USERCOOKIE        = "selected-user";
 const CARETSPAN         = "<span class='caret'></span>"
+const LOCATIONTD        = "location";
 const SUCCESS           = "success";
+const CHARGING          = "Charging";
 
 var table               = document.getElementById(TABLEID);
 var usersbutton         = document.getElementById(DROPDOWNBUTTONID);
 var dropdown            = document.getElementById(DROPDOWNULID);
 var assignbutton        = document.getElementById(ASSIGNBUTTON);
+var returnbutton        = document.getElementById(RETURNBUTTON);
 
 var saveduser = "";
 var selecteduser = usersbutton.getAttribute("name");
@@ -26,7 +30,9 @@ window.onload = function() {
     // read cookie
     checkUserCookie();
     setUserButtonText(saveduser);
-    changeAssignState();
+    changeAssignState(ASSIGNBUTTON);
+    changeReturnState(RETURNBUTTON);
+    //initDataTable(TABLEID);
 
     var rows = document.getElementById(TABLEID).getElementsByTagName("tr");
     for(var i = 1; i < rows.length; i++) {
@@ -74,6 +80,46 @@ assignbutton.addEventListener("click", function(ev) {
     }
 });
 
+returnbutton.addEventListener("click", function(ev) {
+    var trs = document.getElementsByTagName("tr");
+    var updated = false;
+    
+    if(trs.length > 1) {
+        var reqJsons = [];
+        for(var i = 1; i < trs.length; i++) {
+            if(trs[i].getAttribute("selected") != "no") {
+                var myJson = {
+                    "Serial": trs[i].getAttribute("id"),
+                    "DeviceName": trs[i].firstElementChild.innerText,
+                    "CurrentLocation": CHARGING
+                }
+
+                reqJsons.push(myJson);
+            }
+        }
+
+        for(var j = 0; j < reqJsons.length; j++) {
+            // send request for updating each row
+            console.log("Request sent: " + reqJsons[j].Serial);
+
+            $.post(updateDeviceAPI, reqJsons[j],
+            function(data, status){
+                console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+                if(j == reqJsons.length) {
+                    location.reload();
+                }
+            });
+            updated = true;
+        }
+    } else {
+        console.error("No devices were selected.");
+    }
+
+    if(updated) {
+        //reDrawElementJQuery("#" + TABLEID);
+    }
+});
+
 dropdown.addEventListener('click', function(ev) {
     if (ev.target !== ev.currentTarget) {
         var clickedItem = ev.target;
@@ -84,7 +130,8 @@ dropdown.addEventListener('click', function(ev) {
         }
     }
     $('.dropdown.open .dropdown-toggle').dropdown('toggle');
-    changeAssignState();
+    changeAssignState(ASSIGNBUTTON);
+    changeReturnState(RETURNBUTTON)
 
     ev.stopPropagation();
 });
@@ -97,7 +144,8 @@ table.addEventListener('click', function(ev) {
     if(ev.target.tagName.toLowerCase() == "tr") {
         console.log(ev.target.id);
     }
-    changeAssignState();
+    changeAssignState(ASSIGNBUTTON);
+    changeReturnState(RETURNBUTTON);
 });
 
 // =====================================================================================
@@ -130,7 +178,7 @@ function checkUserName (name) {
     return found;
 }
 
-function changeAssignState() {
+function changeAssignState(id) {
     var devicesselected = false;
     var userselected = false;
     var trs = table.getElementsByTagName("tr");
@@ -144,9 +192,27 @@ function changeAssignState() {
     }
 
     if(devicesselected && userselected)
-        $('#assignToUser').removeClass("disabled");
+        $('#' + id).removeClass("disabled");
     else
-        $('#assignToUser').addClass("disabled");
+        $('#' + id).addClass("disabled");
+}
+
+function changeReturnState(id) {
+    var devicesselected = false;
+    var devicesassigned = false;
+    var trs = table.getElementsByTagName("tr");
+    
+    for(var i = 0; i < trs.length; i++) {
+        if(trs[i].getAttribute("selected") == "selected")
+            devicesselected = true;
+        if(trs[i].children[3].innerText == selecteduser)
+            devicesassigned = true;
+    }
+
+    if(devicesselected && devicesassigned)
+        $('#returnItems').removeClass("disabled");
+    else
+        $('#returnItems').addClass("disabled");
 }
 
 function checkUserCookie() {
@@ -188,5 +254,9 @@ $.fn.redraw = function(){
     var redraw = this.offsetHeight;
   });
 };
+
+function initDataTable(id) {
+    $("#" + id).DataTable();
+}
 
 // =====================================================================================
