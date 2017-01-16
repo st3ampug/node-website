@@ -1,5 +1,5 @@
 // Variables ===========================================================================
-const updateDeviceAPI   = "http://localhost:3001/api/devices";
+const updateDeviceAPI   = "http://192.168.1.168:3001/api/devices";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
@@ -26,7 +26,8 @@ var selecteduser = usersbutton.getAttribute("name");
 // =====================================================================================
 
 // Event Listeners =====================================================================
-window.onload = function() {
+//window.onload = function() {
+window.addEventListener('load', function(){
     console.log("onload");
     // read cookie
     checkUserCookie();
@@ -39,10 +40,61 @@ window.onload = function() {
     for(var i = 1; i < rows.length; i++) {
         console.log(rows[i].getAttribute("id"));
     }
-};
 
-assignbutton.addEventListener("click", function(ev) {
-    if(!$('#' + ASSIGNBUTTON).hasClass('disabled')) {
+
+    assignbutton.addEventListener("click", function(e) {
+        //alert("touch");
+        assignAction(ASSIGNBUTTON, usersbutton.getAttribute("name"));
+        e.preventDefault();
+    });
+    // assignbutton.addEventListener("touchstart", function(e) {
+    //     assignAction(ASSIGNBUTTON, usersbutton.getAttribute("name"));
+    //     e.preventDefault();
+    // });
+
+    returnbutton.addEventListener("click", function(e) {
+        assignAction(RETURNBUTTON, CHARGING);
+        e.preventDefault();
+    });
+    // returnbutton.addEventListener("touchstart", function() {
+    //     assignAction(RETURNBUTTON, CHARGING);
+    //     e.preventDefault();
+    // });
+
+    dropdown.addEventListener('click', function(ev) {
+        if (ev.target !== ev.currentTarget) {
+            var clickedItem = ev.target;
+            console.log(clickedItem.text);
+            if(clickedItem.parentNode.getAttribute("class") != "disabled") {
+                setCookie(USERCOOKIE, clickedItem.text, 999);
+                setUserButtonText(clickedItem.text);
+            }
+        }
+        $('.dropdown.open .dropdown-toggle').dropdown('toggle');
+        changeAssignState(ASSIGNBUTTON);
+        changeReturnState(RETURNBUTTON)
+
+        ev.stopPropagation();
+    });
+
+    table.addEventListener('click', function(ev) {
+        if(ev.target.tagName.toLowerCase() == "td") {
+            console.log(ev.target.tagName.toLowerCase() + " >> " + ev.target.parentNode.id);
+            selectDevice(ev.target.parentNode.id);
+        }
+        if(ev.target.tagName.toLowerCase() == "tr") {
+            console.log(ev.target.id);
+        }
+        changeAssignState(ASSIGNBUTTON);
+        changeReturnState(RETURNBUTTON);
+    });
+});
+
+
+
+
+function assignAction(button, username) {
+    if(!$('#' + button).hasClass('disabled')) {
         var trs = document.getElementsByTagName("tr");
         var updated = false;
         
@@ -53,7 +105,7 @@ assignbutton.addEventListener("click", function(ev) {
                     var myJson = {
                         "Serial": trs[i].getAttribute("id"),
                         "DeviceName": trs[i].firstElementChild.innerText,
-                        "CurrentLocation": usersbutton.getAttribute("name")
+                        "CurrentLocation": username
                     }
 
                     reqJsons.push(myJson);
@@ -83,79 +135,7 @@ assignbutton.addEventListener("click", function(ev) {
     } else {
         console.log("button was disabled");
     }
-});
-
-returnbutton.addEventListener("click", function(ev) {
-    if(!$('#' + RETURNBUTTON).hasClass('disabled')) {
-        var trs = document.getElementsByTagName("tr");
-        var updated = false;
-        
-        if(trs.length > 1) {
-            var reqJsons = [];
-            for(var i = 1; i < trs.length; i++) {
-                if(trs[i].getAttribute("selected") != "no") {
-                    var myJson = {
-                        "Serial": trs[i].getAttribute("id"),
-                        "DeviceName": trs[i].firstElementChild.innerText,
-                        "CurrentLocation": CHARGING
-                    }
-
-                    reqJsons.push(myJson);
-                }
-            }
-
-            for(var j = 0; j < reqJsons.length; j++) {
-                // send request for updating each row
-                console.log("Request sent: " + reqJsons[j].Serial);
-
-                $.post(updateDeviceAPI, reqJsons[j],
-                function(data, status){
-                    console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-                    if(j == reqJsons.length) {
-                        location.reload();
-                    }
-                });
-                updated = true;
-            }
-        } else {
-            console.error("No devices were selected.");
-        }
-
-        if(updated) {
-            //reDrawElementJQuery("#" + TABLEID);
-        }
-    } else {
-        console.log("button was disabled");
-    }
-});
-
-dropdown.addEventListener('click', function(ev) {
-    if (ev.target !== ev.currentTarget) {
-        var clickedItem = ev.target;
-        console.log(clickedItem.text);
-        if(clickedItem.parentNode.getAttribute("class") != "disabled") {
-            setCookie(USERCOOKIE, clickedItem.text, 999);
-            setUserButtonText(clickedItem.text);
-        }
-    }
-    $('.dropdown.open .dropdown-toggle').dropdown('toggle');
-    changeAssignState(ASSIGNBUTTON);
-    changeReturnState(RETURNBUTTON)
-
-    ev.stopPropagation();
-});
-
-table.addEventListener('click', function(ev) {
-    if(ev.target.tagName.toLowerCase() == "td") {
-        console.log(ev.target.tagName.toLowerCase() + " >> " + ev.target.parentNode.id);
-        selectDevice(ev.target.parentNode.id);
-    }
-    if(ev.target.tagName.toLowerCase() == "tr") {
-        console.log(ev.target.id);
-    }
-    changeAssignState(ASSIGNBUTTON);
-    changeReturnState(RETURNBUTTON);
-});
+}
 
 // =====================================================================================
 
@@ -214,7 +194,7 @@ function changeReturnState(id) {
     for(var i = 0; i < trs.length; i++) {
         if(trs[i].getAttribute("selected") == "selected")
             devicesselected = true;
-        if(trs[i].children[3].innerText == selecteduser)
+        if(trs[i].children[4].innerText == selecteduser)
             devicesassigned = true;
     }
 
