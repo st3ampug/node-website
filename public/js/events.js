@@ -1,5 +1,5 @@
 // Variables ===========================================================================
-const updateDeviceAPI   = "http://192.168.1.168:3001/api/devices";
+const updateDeviceAPI   = "http://localhost:3001/api/devices";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";

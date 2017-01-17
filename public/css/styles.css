@@ -27,8 +27,8 @@ header .extra-left-margin {
 }
 
 .navbar-brand img {
-  content: url(../img/w-logo.png);
-  height: 20px;
+  content: url(../img/jira-logo-scaled.png);
+  height: 21px;
   /* something needs to be done about fitting it onto the bar */
 }
 
