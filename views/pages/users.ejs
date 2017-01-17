@@ -1,15 +1,30 @@
 
 <%- contentFor('body') %>
-<div class="jumbotron text-center">
-  <h1>Available users</h1>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Available users</div>
+  <div class="panel-body">
+    <table class="table table-bordered table-striped" id="usersTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (item of items) { %>
+        <tr>
+          <td><%= item.Name %></td>
+          <td><%= item.Email %></td>
+          <td><%= item.State %></td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-  <% for (item of items) { %>
-    <div class="row">
-      <div class="col-sm-3">
-        <h2><%= item.Name %></h2>
-      </div>
-    </div>
-  <% } %>
+<script src="js/events-users.js" type="text/javascript"></script>
 
 <%- contentFor('employees') %>

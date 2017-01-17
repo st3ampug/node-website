@@ -1,3 +1,5 @@
+const APISERVERIP     = "52.210.163.110";
+const APISERVERPORT   = "3001";
 // require express
 var express = require('express');
 var path    = require('path');
@@ -12,18 +14,18 @@ var router = express.Router();
 // export our router
 module.exports = router;
 
-// route for our homepage
+// route for our home page
 router.get('/', function(req, res) {
   async.parallel([
     function(next) {
-      request('http://localhost:3001/api/devices', function (error, response, body) {
+      request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/devices', function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log("Devices request: 200");
             next(null, body);
         }
       });
     }, function(next) {
-      request('http://localhost:3001/api/users', function (error, response, body) {
+      request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/users', function (error, response, body) {
         if (!error && response.statusCode == 200) {
             console.log("Users request: 200");
             next(null, body);
@@ -39,12 +41,22 @@ router.get('/', function(req, res) {
   });
 });
 
-// route for our about page
+// route for our users page
 router.get('/users', function(req, res) {
-  request('http://localhost:3001/api/users', function (error, response, body) {
+  request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/users', function (error, response, body) {
     if (!error && response.statusCode == 200) {
         console.log(body);
         res.render('pages/users', {items: JSON.parse(body)});
+    }
+  });
+});
+
+// route for our inventory page
+router.get('/inventory', function(req, res) {
+  request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/devices', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+        res.render('pages/inventory', {items: JSON.parse(body)});
     }
   });
 });

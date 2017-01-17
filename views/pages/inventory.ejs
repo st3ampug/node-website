@@ -1,0 +1,44 @@
+
+<%- contentFor('body') %>
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Inventory</div>
+  <div class="panel-body">
+    <table class="table table-bordered table-striped" id="inventoryTable">
+      <thead>
+        <tr>
+          <th>Device Name</th>
+          <th>Serial</th>
+          <th>Location</th>
+          <th>OS</th>
+          <th>Version</th>
+          <th>Imei</th>
+          <th>MAC Address</th>
+          <th>Model</th>
+          <th>Owner</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (item of items) { %>
+        <tr>
+          <td><%= item.DeviceName %></td>
+          <td><%= item.Serial %></td>
+          <td><%= item.CurrentLocation %></td>
+          <td><%= item.OS %></td>
+          <td><%= item.Version %></td>
+          <td><%= item.Imei %></td>
+          <td><%= item.MACAddress %></td>
+          <td><%= item.Model %></td>
+          <td><%= item.Owner %></td>
+          <td><%= item.Notes %></td>          
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="js/events-inv.js" type="text/javascript"></script>
+
+<%- contentFor('employees') %>

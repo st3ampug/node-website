@@ -1,9 +1,11 @@
 // Variables ===========================================================================
-const updateDeviceAPI   = "http://localhost:3001/api/devices";
+const updateDeviceAPI   = "http://52.210.163.110:3001/api/devices";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
-const TABLEID           = "devicesTable";
+const DEVICESTABLEID    = "devicesTable";
+const USERSTABLEID      = "usersTable";
+const INVENTORYTABLEID  = "inventoryTable";
 const DROPDOWNBUTTONID  = "dropdownUsersButton";
 const DROPDOWNULID      = "dropdownUsersList";
 const ASSIGNBUTTON      = "assignToUser";
@@ -14,7 +16,7 @@ const LOCATIONTD        = "location";
 const SUCCESS           = "success";
 const CHARGING          = "Charging";
 
-var table               = document.getElementById(TABLEID);
+var table               = document.getElementById(DEVICESTABLEID);
 var usersbutton         = document.getElementById(DROPDOWNBUTTONID);
 var dropdown            = document.getElementById(DROPDOWNULID);
 var assignbutton        = document.getElementById(ASSIGNBUTTON);
@@ -34,9 +36,9 @@ window.addEventListener('load', function(){
     setUserButtonText(saveduser);
     changeAssignState(ASSIGNBUTTON);
     changeReturnState(RETURNBUTTON);
-    initDataTableMinimal(TABLEID);
+    initDataTableMinimal(DEVICESTABLEID);
 
-    var rows = document.getElementById(TABLEID).getElementsByTagName("tr");
+    var rows = document.getElementById(DEVICESTABLEID).getElementsByTagName("tr");
     for(var i = 1; i < rows.length; i++) {
         console.log(rows[i].getAttribute("id"));
     }
