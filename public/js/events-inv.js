@@ -24,7 +24,7 @@ var table               = document.getElementById(INVENTORYTABLEID);
 //window.onload = function() {
 window.addEventListener('load', function(){
     console.log("onload");
-    initDataTableMedium(INVENTORYTABLEID);
+    initDataTableMaximum(INVENTORYTABLEID);
 
     var rows = document.getElementById(INVENTORYTABLEID).getElementsByTagName("tr");
     for(var i = 1; i < rows.length; i++) {
@@ -92,6 +92,14 @@ function initDataTableMedium(id) {
         "paging":   true,
         "ordering": true,
         "info":     false
+    });
+}
+
+function initDataTableMaximum(id) {
+    $("#" + id).DataTable({
+        "paging":   true,
+        "ordering": true,
+        "info":     true
     });
 }
 

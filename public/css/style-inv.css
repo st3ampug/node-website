@@ -1,0 +1,16 @@
+@media screen and (max-width: 959px) {
+    th#imei, th#macaddress, th#model, th#owner, th#notes{
+        display:none;
+        width:0;
+        height:0;
+        opacity:0;
+        visibility: collapse;       
+    }
+    td#imei, td#macaddress, td#model, td#owner, td#notes{
+        display:none;
+        width:0;
+        height:0;
+        opacity:0;
+        visibility: collapse;       
+    }
+}

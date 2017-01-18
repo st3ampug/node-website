@@ -1,0 +1,16 @@
+@media screen and (max-width: 959px) {
+    th#os, th#version, th#notes{
+        display:none;
+        width:0;
+        height:0;
+        opacity:0;
+        visibility: collapse;       
+    }
+    td#os, td#version, td#notes{
+        display:none;
+        width:0;
+        height:0;
+        opacity:0;
+        visibility: collapse;       
+    }
+}
