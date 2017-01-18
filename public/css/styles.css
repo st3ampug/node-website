@@ -1,4 +1,4 @@
-@media all and (max-width: 959px) {
+@media screen and (max-width: 959px) {
     th#os, th#version, th#notes{
         display:none;
         width:0;
