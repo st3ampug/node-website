@@ -1,5 +1,5 @@
 // Variables ===========================================================================
-const updateUserAPI   = "http://Sample-env.6yes34pbka.eu-west-1.elasticbeanstalk.com:3001/api/users";
+const updateUserAPI   = "http://52.210.163.110:3001/api/users";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
