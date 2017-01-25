@@ -11,6 +11,9 @@ tr[selected='selected'] {
 .my-extra-padding {
     padding: 5px 0px 25px 5px;
 }
+.my-margin-bottom {
+    margin-bottom: 10px;
+}
 
 body {
   font-size: 16px;

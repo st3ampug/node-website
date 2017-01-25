@@ -1,17 +1,17 @@
 <%- contentFor('top') %>
 
 <%- contentFor('middle') %>
-<div class="col-sm-9">
-    <div class="my-float-left" id="buttons">
-      <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addUserModal" id="addNewUser">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add User
-      </button>
-    </div>
+<div class="col-sm-9 my-margin-bottom">
+  <div class="my-float-left" id="buttons">
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addUserModal" id="addNewUser">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add User
+    </button>
+  </div>
 
   <!-- Modal -->
   <div class="modal fade" id="addUserModal" role="dialog">
     <div class="modal-dialog">
-    
+
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
@@ -19,24 +19,27 @@
           <h4 class="modal-title">Add New User</h4>
         </div>
         <div class="modal-body">
-          
-          
-          <div class="row my-extra-padding">
+
+          <div class="row my-margin-bottom">
             <div class="col-md-9">
               <label for="userName">Name</label>
                 <input type="text" class="form-control" id="userName" placeholder="Name"/>
             </div>
           </div>
-          <div class="row my-extra-padding">
+          <div class="row my-margin-bottom">
             <div class="col-md-9">
               <label for="userEmail">E-Mail</label>
                 <input type="email" class="form-control" id="userEmail" placeholder="E-Mail"/>
             </div>
           </div>
-          <div class="row my-extra-padding">
+          <div class="row my-margin-bottom">
             <div class="col-md-9">
-              <button type="button" class="btn btn-default" id="modalSubmit">Submit</button>
-              <div id="modalMessage"></div>
+              <button type="button" class="btn btn-default" id="modalSubmitUser">Submit</button>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <div id="modalMessageUser"></div>
             </div>
           </div>
 
@@ -45,10 +48,107 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
-      
-      </div>
-    </div>
 
+    </div>
   </div>
+
+</div>
+
+<div class="col-sm-9 my-margin-bottom">
+  <div class="my-float-left" id="buttons">
+    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addDeviceModal" id="addNewDevice">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Device
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="addDeviceModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add New Device</h4>
+        </div>
+        <div class="modal-body">
+
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceName">Name *</label>
+                <input type="text" class="form-control" id="deviceName" placeholder="Name"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceSerial">Serial *</label>
+                <input type="text" class="form-control" id="deviceSerial" placeholder="Serial"/>
+                <span class="help-block">iOS: Settings > General > About > Serial Number<br />
+                Android: Settings > About > Status > Serial number</span>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceOSType">OS</label>
+                <input type="text" class="form-control" id="deviceOSType" placeholder="Android/iOS"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceOSVersion">Version</label>
+                <input type="text" class="form-control" id="deviceOSVersion" placeholder="7.1.1"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceImei">Imei</label>
+                <input type="text" class="form-control" id="deviceImei" placeholder="Imei"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceMacAddress">MAC Address</label>
+                <input type="text" class="form-control" id="deviceMacAddress" placeholder="MAC address"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceModelNumber">Model Number</label>
+                <input type="text" class="form-control" id="deviceModelNumber" placeholder="Model Number"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceOwner">Owner</label>
+                <input type="text" class="form-control" id="deviceOwner" placeholder="Waracle"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <label for="deviceNotes">Notes</label>
+                <input type="text" class="form-control" id="deviceNotes" placeholder="Notes"/>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <button type="button" class="btn btn-default" id="modalSubmitDevice">Submit</button>
+            </div>
+          </div>
+          <div class="row my-margin-bottom">
+            <div class="col-md-9">
+              <div id="modalMessageDevice"></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
 
 <script src="js/events-admin.js" type="text/javascript"></script>

@@ -16,21 +16,43 @@ const CARETSPAN         = "<span class='caret'></span>"
 const LOCATIONTD        = "location";
 const SUCCESS           = "success";
 const CHARGING          = "Charging";
-const MODALID           = "addUserModal";
-const MODALFORM         = "modalForm";
 const MODALUSERNAME     = "userName";
 const MODALUSEREMAIL    = "userEmail";
-const MODALSUBMIT       = "modalSubmit";
-const MODALMESSAGE      = "modalMessage";
+const MODALSUBMITUSER   = "modalSubmitUser";
+const MODALMESSAGEUSER  = "modalMessageUser";
 const ADDNEWUSERBUTTON  = "addNewUser";
+const ADDNEWDEVICEBUTTON= "addNewDevice";
+const DEVICENAMEID      = "deviceName";
+const DEVICESERIALID    = "deviceSerial";
+const DEVICEOSTYPE      = "deviceOSType";
+const DEVICEOSVERSIONID = "deviceOSVersion";
+const DEVICEIMEIID      = "deviceImei";
+const DEVICEMACADDRID   = "deviceMacAddress";
+const DEVICEMODELID     = "deviceModelNumber";
+const DEVICEOWNERID     = "deviceOwner";
+const DEVICENOTESID     = "deviceNotes";
+const MODALSUBMITDEVICE = "modalSubmitDevice";
+const MODALMESSAGEDEVICE= "modalMessageDevice";
 
-var modal               = document.getElementById(MODALID);
-var modalForm           = document.getElementById(MODALFORM);
 var modalUserName       = document.getElementById(MODALUSERNAME);
 var modalUserEmail      = document.getElementById(MODALUSEREMAIL);
-var modalSubmit         = document.getElementById(MODALSUBMIT);
-var modalMessage        = document.getElementById(MODALMESSAGE);
+var modalSubmitUser     = document.getElementById(MODALSUBMITUSER);
+var modalMessageUser    = document.getElementById(MODALMESSAGEUSER);
 var buttonAddNewUser    = document.getElementById(ADDNEWUSERBUTTON);
+
+var modalSubmitDevice   = document.getElementById(MODALSUBMITDEVICE);
+var modalMessageDevice  = document.getElementById(MODALMESSAGEDEVICE);
+var buttonAddNewDevice  = document.getElementById(ADDNEWDEVICEBUTTON);
+var modalDeviceName     = document.getElementById(DEVICENAMEID);
+var modalDeviceSerial     = document.getElementById(DEVICESERIALID);
+var modalDeviceOSType     = document.getElementById(DEVICEOSTYPE);
+var modalDeviceOSVersion     = document.getElementById(DEVICEOSVERSIONID);
+var modalDeviceImei     = document.getElementById(DEVICEIMEIID);
+var modalDeviceMACAddr     = document.getElementById(DEVICEMACADDRID);
+var modalDeviceModel     = document.getElementById(DEVICEMODELID);
+var modalDeviceOwner     = document.getElementById(DEVICEOWNERID);
+var modalDeviceNotes     = document.getElementById(DEVICENOTESID);
+
 
 // =====================================================================================
 
@@ -40,11 +62,21 @@ window.addEventListener('load', function(){
     console.log("onload");
 
     buttonAddNewUser.addEventListener('click', function(){
-        modalMessage.innerText = "";
+        modalMessageUser.innerText = "";
     });
 
-    modalSubmit.addEventListener('click', function() {
-        submitNewUser();
+    modalSubmitUser.addEventListener('click', function() {
+        if(validateUserModalForm())
+            submitNewUser();
+    });
+
+    buttonAddNewDevice.addEventListener('click', function(){
+        modalMessageDevice.innerText = "";
+    });
+
+    modalSubmitDevice.addEventListener('click', function() {
+        if(validateDeviceModalForm())
+            submitNewDevice();
     });
 });
 
@@ -52,35 +84,100 @@ window.addEventListener('load', function(){
 
 // Helpers =============================================================================
 
-function submitNewUser() {
+function validateUserModalForm() {
     var username = modalUserName.value;
     var useremail = modalUserEmail.value;
 
+    if(username != "" && useremail != ""){
+        return true;
+    } else {
+        modalMessageUser.innerText = "Fields don't appear to be populated correctly";
+        return false;
+    }
+}
+
+function submitNewUser() {
     var userJson = {
-        Name: username,
-        Email: useremail,
+        Name: modalUserName.value,
+        Email: modalUserEmail.value,
         State: "active"
     };
-
     console.log(userJson);
 
-    if(username != "" && useremail != ""){
-        $.ajax({
-            url: updateUserAPI,
-            type: 'PUT',
-            dataType: 'json',
-            data: userJson,
-            timeout: 1500,
-            success: function(response) {
-                console.log(response);
-                modalMessage.innerText = "User submission successful";
-            },
-            error: function() {
-                modalMessage.innerText = "User submission failed";
-            }
-        });
+    $.ajax({
+        url: updateUserAPI,
+        type: 'PUT',
+        dataType: 'json',
+        data: userJson,
+        timeout: 1500,
+        success: function(response) {
+            console.log(response);
+            modalMessageUser.innerText = "User submission successful";
+        },
+        error: function() {
+            modalMessageUser.innerText = "User submission failed";
+        }
+    });
+}
+
+function validateDeviceModalForm() {
+    var devicename = modalDeviceName.value;
+    var deviceserial = modalDeviceSerial.value;
+
+    if(devicename != "" && deviceserial != ""){
+        return true;
     } else {
-        modalMessage.innerText = "Fields don't appear to be populated correctly";
+        modalMessageDevice.innerText = "Fields don't appear to be populated correctly";
+        return false;
+    }
+}
+
+function submitNewDevice() {
+    var devicename = modalDeviceName.value;
+    var deviceserial = modalDeviceSerial.value;
+    var deviceos = checkContent(modalDeviceOSType.value);
+    var deviceosversion = checkContent(modalDeviceOSVersion.value);
+    var deviceimei = checkContent(modalDeviceImei.value);
+    var devicemac = checkContent(modalDeviceMACAddr.value);
+    var devicemodel = checkContent(modalDeviceModel.value);
+    var deviceowner = checkContent(modalDeviceOwner.value);
+    var devicenotes = checkContent(modalDeviceNotes.value);
+
+    var deviceJson = {
+        Serial: deviceserial,
+        DeviceName: devicename,
+        CurrentLocation: "Charging",
+        Imei: deviceimei,
+        MACAddress: devicemac,
+        Model: devicemodel,
+        OS: deviceos,
+        Owner: deviceowner,
+        Version: deviceosversion,
+        Notes: devicenotes
+    };
+    console.log(deviceJson);
+
+    $.ajax({
+        url: updateDeviceAPI,
+        type: 'PUT',
+        dataType: 'json',
+        data: deviceJson,
+        timeout: 1500,
+        success: function(response) {
+            console.log(response);
+            modalMessageDevice.innerText = "Device submission successful";
+        },
+        error: function() {
+            modalMessageDevice.innerText = "Device submission failed";
+        }
+    });
+}
+
+function checkContent(value) {
+    if(value != "") {
+        return value;
+    } else {
+        return "-";
     }
 }
 
