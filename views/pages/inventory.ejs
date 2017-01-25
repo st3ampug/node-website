@@ -1,45 +1,39 @@
 
-<%- contentFor('body') %>
-<div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading">Inventory</div>
-  <div class="panel-body">
-    <table class="table table-bordered table-striped" id="inventoryTable">
-      <thead>
-        <tr>
-          <th id="name">Device Name</th>
-          <th id="serial">Serial</th>
-          <th id="location">Location</th>
-          <th id="os">OS</th>
-          <th id="version">Version</th>
-          <th id="imei">Imei</th>
-          <th id="macaddress">MAC Address</th>
-          <th id="model">Model</th>
-          <th id="owner">Owner</th>
-          <th id="notes">Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for (item of items) { %>
-        <tr>
-          <td id="name"><%= item.DeviceName %></td>
-          <td id="serial"><%= item.Serial %></td>
-          <td id="location"><%= item.CurrentLocation %></td>
-          <td id="os"><%= item.OS %></td>
-          <td id="version"><%= item.Version %></td>
-          <td id="imei"><%= item.Imei %></td>
-          <td id="macaddress"><%= item.MACAddress %></td>
-          <td id="model"><%= item.Model %></td>
-          <td id="owner"><%= item.Owner %></td>
-          <td id="notes"><%= item.Notes %></td>          
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-  </div>
-</div>
+<%- contentFor('middle') %>
+<table class="table table-bordered table-striped" id="inventoryTable">
+  <thead>
+    <tr>
+      <th id="name">Device Name</th>
+      <th id="serial">Serial</th>
+      <th id="location">Location</th>
+      <th id="os">OS</th>
+      <th id="version">Version</th>
+      <th id="imei">Imei</th>
+      <th id="macaddress">MAC Address</th>
+      <th id="model">Model</th>
+      <th id="owner">Owner</th>
+      <th id="notes">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (item of items) { %>
+    <tr>
+      <td id="name"><%= item.DeviceName %></td>
+      <td id="serial"><%= item.Serial %></td>
+      <td id="location"><%= item.CurrentLocation %></td>
+      <td id="os"><%= item.OS %></td>
+      <td id="version"><%= item.Version %></td>
+      <td id="imei"><%= item.Imei %></td>
+      <td id="macaddress"><%= item.MACAddress %></td>
+      <td id="model"><%= item.Model %></td>
+      <td id="owner"><%= item.Owner %></td>
+      <td id="notes"><%= item.Notes %></td>          
+    </tr>
+    <% } %>
+  </tbody>
+</table>
 
 <link rel="stylesheet" href="/css/style-inv.css">
 <script src="js/events-inv.js" type="text/javascript"></script>
 
-<%- contentFor('employees') %>
+<%- contentFor('top') %>
