@@ -1,4 +1,5 @@
-const APISERVERIP     = "52.210.163.110";
+//const APISERVERIP     = "52.210.163.110";
+const APISERVERIP     = "localhost";
 const APISERVERPORT   = "3001";
 // require express
 var express = require('express');
@@ -59,6 +60,10 @@ router.get('/inventory', function(req, res) {
         res.render('pages/inventory', {items: JSON.parse(body)});
     }
   });
+});
+
+router.get('/admin', function(req, res) {
+  res.render('pages/admin');
 });
 
 router.get('/contact', function(req, res) {

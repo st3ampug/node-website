@@ -1,5 +1,6 @@
 // Variables ===========================================================================
-const updateDeviceAPI   = "http://52.210.163.110:3001/api/devices";
+const updateDeviceAPI   = "http://Sample-env.6yes34pbka.eu-west-1.elasticbeanstalk.com:3001/api/devices";
+//const updateDeviceAPI   = "http://52.210.163.110:3001/api/devices";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";

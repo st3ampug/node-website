@@ -1,5 +1,6 @@
 // Variables ===========================================================================
-const updateUserAPI   = "http://Sample-env.6yes34pbka.eu-west-1.elasticbeanstalk.com:3001/api/users";
+const updateDeviceAPI   = "http://Sample-env.6yes34pbka.eu-west-1.elasticbeanstalk.com:3001/api/devices";
+const updateUserAPI     = "http://Sample-env.6yes34pbka.eu-west-1.elasticbeanstalk.com:3001/api/users";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
@@ -15,8 +16,21 @@ const CARETSPAN         = "<span class='caret'></span>"
 const LOCATIONTD        = "location";
 const SUCCESS           = "success";
 const CHARGING          = "Charging";
+const MODALID           = "addUserModal";
+const MODALFORM         = "modalForm";
+const MODALUSERNAME     = "userName";
+const MODALUSEREMAIL    = "userEmail";
+const MODALSUBMIT       = "modalSubmit";
+const MODALMESSAGE      = "modalMessage";
+const ADDNEWUSERBUTTON  = "addNewUser";
 
-var table               = document.getElementById(USERSTABLEID);
+var modal               = document.getElementById(MODALID);
+var modalForm           = document.getElementById(MODALFORM);
+var modalUserName       = document.getElementById(MODALUSERNAME);
+var modalUserEmail      = document.getElementById(MODALUSEREMAIL);
+var modalSubmit         = document.getElementById(MODALSUBMIT);
+var modalMessage        = document.getElementById(MODALMESSAGE);
+var buttonAddNewUser    = document.getElementById(ADDNEWUSERBUTTON);
 
 // =====================================================================================
 
@@ -24,27 +38,51 @@ var table               = document.getElementById(USERSTABLEID);
 //window.onload = function() {
 window.addEventListener('load', function(){
     console.log("onload");
-    initDataTableMaximum(USERSTABLEID);
 
-    var rows = document.getElementById(USERSTABLEID).getElementsByTagName("tr");
-    for(var i = 1; i < rows.length; i++) {
-        console.log(rows[i].getAttribute("id"));
-    }
+    buttonAddNewUser.addEventListener('click', function(){
+        modalMessage.innerText = "";
+    });
 
-    table.addEventListener('click', function(ev) {
-        if(ev.target.tagName.toLowerCase() == "td") {
-            console.log(ev.target.tagName.toLowerCase() + " >> " + ev.target.parentNode.id);
-            selectDevice(ev.target.parentNode.id);
-        }
-        if(ev.target.tagName.toLowerCase() == "tr") {
-            console.log(ev.target.id);
-        }
+    modalSubmit.addEventListener('click', function() {
+        submitNewUser();
     });
 });
 
 // =====================================================================================
 
 // Helpers =============================================================================
+
+function submitNewUser() {
+    var username = modalUserName.value;
+    var useremail = modalUserEmail.value;
+
+    var userJson = {
+        Name: username,
+        Email: useremail,
+        State: "active"
+    };
+
+    console.log(userJson);
+
+    if(username != "" && useremail != ""){
+        $.ajax({
+            url: updateUserAPI,
+            type: 'PUT',
+            dataType: 'json',
+            data: userJson,
+            timeout: 1500,
+            success: function(response) {
+                console.log(response);
+                modalMessage.innerText = "User submission successful";
+            },
+            error: function() {
+                modalMessage.innerText = "User submission failed";
+            }
+        });
+    } else {
+        modalMessage.innerText = "Fields don't appear to be populated correctly";
+    }
+}
 
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
