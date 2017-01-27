@@ -63,7 +63,12 @@ router.get('/inventory', function(req, res) {
 });
 
 router.get('/admin', function(req, res) {
-  res.render('pages/admin');
+  request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/log/' + currentDate(), function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+        res.render('pages/admin', {items: JSON.parse(body)});
+    }
+  });
 });
 
 router.get('/contact', function(req, res) {
@@ -73,3 +78,11 @@ router.get('/contact', function(req, res) {
 router.post('/contact', function(req, res) {
   res.send('Thanks for contacting us, ' + req.body.name + '! We will respond shortly!');
 });
+
+// Helper
+function currentDate() {
+    var dateFormat = require('dateformat');
+    var now = new Date();
+    //dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+    return dateFormat(now, "yyyy-mm-dd");
+}
