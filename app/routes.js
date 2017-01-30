@@ -1,5 +1,5 @@
 const APISERVERIP     = "52.210.163.110";
-//const APISERVERIP     = "localhost";
+// const APISERVERIP     = "localhost";
 const APISERVERPORT   = "3001";
 // require express
 var express = require('express');

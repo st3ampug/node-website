@@ -1,5 +1,7 @@
 // Variables ===========================================================================
-const getLogsAPI     = "http://52.210.163.110:3001/api/log";
+const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
+const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
+const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const LOGSTABLEID       = "logsTable";
 

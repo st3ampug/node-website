@@ -1,5 +1,7 @@
 // Variables ===========================================================================
-const updateUserAPI   = "http://52.210.163.110:3001/api/users";
+const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
+const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
+const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
