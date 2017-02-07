@@ -1,7 +1,7 @@
 // Variables ===========================================================================
-const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
-const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
-const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
+// const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
+// const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
+// const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
