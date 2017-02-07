@@ -1,5 +1,5 @@
-const APISERVERIP     = "52.210.163.110";
-// const APISERVERIP     = "localhost";
+//const APISERVERIP     = "52.210.163.110";
+const APISERVERIP     = "localhost";
 const APISERVERPORT   = "3001";
 // require express
 var express = require('express');
@@ -63,12 +63,14 @@ router.get('/inventory', function(req, res) {
 });
 
 router.get('/admin', function(req, res) {
-  request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/log/' + currentDate(), function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        console.log(body);
-        res.render('pages/admin', {items: JSON.parse(body)});
-    }
-  });
+  // request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/log/' + currentDate(), function (error, response, body) {
+  //   if (!error && response.statusCode == 200) {
+  //       console.log(body);
+  //       res.render('pages/admin', {items: JSON.parse(body)});
+  //   }
+  // });
+
+  res.render('pages/admin', {items: ['Nothing to see here']});
 });
 
 router.get('/contact', function(req, res) {
