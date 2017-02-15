@@ -101,7 +101,8 @@ function submitNewUser() {
     var userJson = {
         Name: modalUserName.value,
         Email: modalUserEmail.value,
-        State: "active"
+        State: "active",
+        LoggedIn: "-"
     };
     console.log(userJson);
 

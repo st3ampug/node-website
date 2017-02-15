@@ -15,8 +15,12 @@ var router = express.Router();
 // export our router
 module.exports = router;
 
-// route for our home page
 router.get('/', function(req, res) {
+  res.render('pages/login');
+});
+
+// route for our home page
+router.get('/home', function(req, res) {
   async.parallel([
     function(next) {
       request('http://' + APISERVERIP + ':' + APISERVERPORT + '/api/devices', function (error, response, body) {
