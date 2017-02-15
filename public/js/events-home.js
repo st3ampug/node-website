@@ -17,6 +17,7 @@ const CARETSPAN         = "<span class='caret'></span>"
 const LOCATIONTD        = "location";
 const SUCCESS           = "success";
 const CHARGING          = "Charging";
+const NAVBARLINKS       = "navbarLinks";
 
 var table               = document.getElementById(DEVICESTABLEID);
 var usersbutton         = document.getElementById(DROPDOWNBUTTONID);
@@ -35,6 +36,9 @@ window.addEventListener('load', function(){
     console.log("onload");
     // read cookie
     checkUserCookie();
+    if(true) { // change this to check the login cookie
+        elementVisibilityON(NAVBARLINKS);
+    }
     setUserButtonText(saveduser);
     changeAssignState(ASSIGNBUTTON);
     changeReturnState(RETURNBUTTON);
@@ -258,6 +262,14 @@ function initDataTableMinimal(id) {
         "ordering": true,
         "info":     false
     });
+}
+
+function elementVisibilityON(id) {
+    $("#" + id).css('visibility', 'visible');
+}
+
+function elementVisibilityOFF(id) {
+    $("#" + id).css('visibility', 'hidden');
 }
 
 // =====================================================================================

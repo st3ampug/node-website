@@ -31,6 +31,17 @@ var registerMessageArea     = document.getElementById(REGISTERMSG);
 window.addEventListener('load', function(){
     console.log("onload");
 
+    // passcheck call added to the api server
+    // on load check the pass cookie
+    // pass cookie should have *email*;*passcodething*
+    // if cookie is not present, navigate to the loginButton
+    // if cookie is there, call the passcheck, compare the 2 passes, let the user nav to home if equals
+    // home and admin should check for the cookie with the api call to show info (and navbar links)
+    // inventory and users should just check if the cookie is present
+
+    // when login is needed, use the login call
+    // when all is good, create the cookie with the pass and update the user with the pass
+
     loginButton.addEventListener('click', function() {
         if(validateLoginForm()) {
             //...
