@@ -1,7 +1,4 @@
 // Variables ===========================================================================
-// const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
-// const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
-// const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
@@ -34,6 +31,8 @@ const DEVICEOWNERID     = "deviceOwner";
 const DEVICENOTESID     = "deviceNotes";
 const MODALSUBMITDEVICE = "modalSubmitDevice";
 const MODALMESSAGEDEVICE= "modalMessageDevice";
+const NAVBARLINKS       = "navbarLinks";
+const CONTAINER         = "container";
 
 var modalUserName       = document.getElementById(MODALUSERNAME);
 var modalUserEmail      = document.getElementById(MODALUSEREMAIL);
@@ -58,9 +57,11 @@ var modalDeviceNotes     = document.getElementById(DEVICENOTESID);
 // =====================================================================================
 
 // Event Listeners =====================================================================
-//window.onload = function() {
+
 window.addEventListener('load', function(){
     console.log("onload");
+
+    loginCookieValidate();
 
     buttonAddNewUser.addEventListener('click', function(){
         modalMessageUser.innerText = "";
@@ -85,6 +86,51 @@ window.addEventListener('load', function(){
 
 // Helpers =============================================================================
 
+function loginCookieValidate() {
+    if(loginCookiePresent()) {
+        cookie = getCookie(LOGINCOOKIE).split(COOKIEDELIMITER);
+        var json = {
+            Email: cookie[0]
+        }
+
+        $.ajax({
+            url: passcheckAPI,
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                withCredentials: false
+            },
+            data: JSON.stringify(json),
+            timeout: 1500,
+            success: function(response) {
+                console.log("Pass check successful");
+                let json = response;
+                if(typeof(json.LoggedIn) !== 'undefined') {
+                    if (json.LoggedIn === cookie[1]) {
+                        
+                        console.log("GREAT SUCCESS");
+                        elementVisibilityON(NAVBARLINKS);
+                        elementVisibilityON(CONTAINER);
+                        
+                        
+                    } else {
+                        redirectPageSaved("");
+                    }
+                } else {
+                    redirectPageSaved("");
+                }
+            },
+            error: function() {
+                redirectPageSaved("");
+            }
+        });
+    } else {
+        console.log("Pass check unsuccessful");
+        redirectPageSaved("");
+    }
+}
+
 function validateUserModalForm() {
     var username = modalUserName.value;
     var useremail = modalUserEmail.value;
@@ -107,7 +153,7 @@ function submitNewUser() {
     console.log(userJson);
 
     $.ajax({
-        url: updateUserAPI,
+        url: newUserAPI,
         type: 'PUT',
         dataType: 'json',
         data: userJson,
@@ -183,61 +229,10 @@ function checkContent(value) {
     }
 }
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
 $.fn.redraw = function(){
   $(this).each(function(){
     var redraw = this.offsetHeight;
   });
 };
-
-function initDataTableDefault(id) {
-    $("#" + id).DataTable();
-}
-
-function initDataTableMinimal(id) {
-    $("#" + id).DataTable({
-        "paging":   false,
-        "ordering": true,
-        "info":     false
-    });
-}
-
-function initDataTableMedium(id) {
-    $("#" + id).DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false
-    });
-}
-
-function initDataTableMaximum(id) {
-    $("#" + id).DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     true
-    });
-}
 
 // =====================================================================================

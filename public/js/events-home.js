@@ -1,7 +1,4 @@
 // Variables ===========================================================================
-// const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
-// const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
-// const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const SELECTED          = "selected";
 const NOTSELECTED       = "no";
@@ -18,6 +15,7 @@ const LOCATIONTD        = "location";
 const SUCCESS           = "success";
 const CHARGING          = "Charging";
 const NAVBARLINKS       = "navbarLinks";
+const CONTAINER         = "container";
 
 var table               = document.getElementById(DEVICESTABLEID);
 var usersbutton         = document.getElementById(DROPDOWNBUTTONID);
@@ -31,14 +29,12 @@ var selecteduser = usersbutton.getAttribute("name");
 // =====================================================================================
 
 // Event Listeners =====================================================================
-//window.onload = function() {
+
 window.addEventListener('load', function(){
     console.log("onload");
     // read cookie
-    checkUserCookie();
-    if(true) { // change this to check the login cookie
-        elementVisibilityON(NAVBARLINKS);
-    }
+    loginCookieValidate();
+
     setUserButtonText(saveduser);
     changeAssignState(ASSIGNBUTTON);
     changeReturnState(RETURNBUTTON);
@@ -148,6 +144,52 @@ function assignAction(button, username) {
 // =====================================================================================
 
 // Helpers =============================================================================
+
+function loginCookieValidate() {
+    if(loginCookiePresent()) {
+        cookie = getCookie(LOGINCOOKIE).split(COOKIEDELIMITER);
+        var json = {
+            Email: cookie[0]
+        }
+
+        $.ajax({
+            url: passcheckAPI,
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                withCredentials: false
+            },
+            data: JSON.stringify(json),
+            timeout: 1500,
+            success: function(response) {
+                console.log("Pass check successful");
+                let json = response;
+                if(typeof(json.LoggedIn) !== 'undefined') {
+                    if (json.LoggedIn === cookie[1]) {
+                        
+                        console.log("GREAT SUCCESS");
+                        elementVisibilityON(NAVBARLINKS);
+                        elementVisibilityON(CONTAINER);
+                        
+                        
+                    } else {
+                        redirectPageSaved("");
+                    }
+                } else {
+                    redirectPageSaved("");
+                }
+            },
+            error: function() {
+                redirectPageSaved("");
+            }
+        });
+    } else {
+        console.log("Pass check unsuccessful");
+        redirectPageSaved("");
+    }
+}
+
 function selectDevice(id) {
     var row = document.getElementById(id);
     if(row.getAttribute(SELECTED) != SELECTED)
@@ -223,53 +265,10 @@ function checkUserCookie() {
     }
 }
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
 $.fn.redraw = function(){
   $(this).each(function(){
     var redraw = this.offsetHeight;
   });
 };
-
-function initDataTableDefault(id) {
-    $("#" + id).DataTable();
-}
-
-function initDataTableMinimal(id) {
-    $("#" + id).DataTable({
-        "paging":   false,
-        "ordering": true,
-        "info":     false
-    });
-}
-
-function elementVisibilityON(id) {
-    $("#" + id).css('visibility', 'visible');
-}
-
-function elementVisibilityOFF(id) {
-    $("#" + id).css('visibility', 'hidden');
-}
 
 // =====================================================================================

@@ -15,7 +15,7 @@ tr[selected='selected'] {
     margin-bottom: 10px;
 }
 
-#navbarLinks {
+#navbarLinks, #container {
     visibility: hidden;
 }
 

@@ -1,7 +1,4 @@
 // Variables ===========================================================================
-// const updateDeviceAPI   = SERVERURL + ":" + SERVERPORT + "/api/devices";
-// const updateUserAPI     = SERVERURL + ":" + SERVERPORT + "/api/users";
-// const getLogsAPI        = SERVERURL + ":" + SERVERPORT + "/api/log";
 
 const LOGINEMAIL    = "loginEmail";
 const LOGINPW       = "loginPassword";
@@ -12,17 +9,13 @@ const REGISTEREMAIL = "registerEmail";
 const REGISTERPW    = "registerPassword";
 const REGISTERBTN   = "registerButton";
 const REGISTERMSG   = "registerMessage";
+const NAVBARLINKS       = "navbarLinks";
+const CONTAINER         = "container";
 
 var loginEmailField         = document.getElementById(LOGINEMAIL);
 var loginPasswordField      = document.getElementById(LOGINPW);
 var loginButton             = document.getElementById(LOGINBTN);
 var loginMessageArea        = document.getElementById(LOGINMSG);
-var registerNameField       = document.getElementById(REGISTERNAME);
-var registerEmailField      = document.getElementById(REGISTEREMAIL);
-var registerPasswordField   = document.getElementById(REGISTERPW);
-var registerButton          = document.getElementById(REGISTERBTN);
-var registerMessageArea     = document.getElementById(REGISTERMSG);
-
 
 // =====================================================================================
 
@@ -30,6 +23,9 @@ var registerMessageArea     = document.getElementById(REGISTERMSG);
 //window.onload = function() {
 window.addEventListener('load', function(){
     console.log("onload");
+
+    elementVisibilityON(CONTAINER);
+    elementVisibilityOFF(NAVBARLINKS);
 
     // passcheck call added to the api server
     // on load check the pass cookie
@@ -42,17 +38,25 @@ window.addEventListener('load', function(){
     // when login is needed, use the login call
     // when all is good, create the cookie with the pass and update the user with the pass
 
+    if(loginCookiePresent()) {
+        redirectPage("home");
+    }
+
     loginButton.addEventListener('click', function() {
         if(validateLoginForm()) {
-            //...
+            var userJson = {
+                Email: loginEmailField.value,
+                Secret: loginPasswordField.value
+            };
+            loginApiPost(userJson);
         }
     });
 
-    registerButton.addEventListener('click', function() {
-        if(validateRegisterForm()) {
-            submitNewUser();
-        }
-    });
+    // registerButton.addEventListener('click', function() {
+    //     if(validateRegisterForm()) {
+    //         submitNewUser();
+    //     }
+    // });
 
     
 });
@@ -73,27 +77,54 @@ function validateLoginForm() {
     }
 }
 
-function submitNewUser() {
-    var userJson = {
-        Name: registerNameField.value,
-        Email: registerEmailField.value,
-        PasswordHash: hashMyPassword(registerPasswordField.value),
-        State: "active"
-    };
-    console.log(userJson);
+function loginApiPost(json) {
 
     $.ajax({
-        url: updateUserAPI,
-        type: 'PUT',
+        url: loginAPI,
+        type: 'POST',
         dataType: 'json',
-        data: userJson,
+        contentType: "application/json; charset=utf-8",
+        xhrFields: {
+            withCredentials: false
+        },
+        data: JSON.stringify(json),
         timeout: 1500,
         success: function(response) {
             console.log(response);
-            modalMessageUser.innerText = "User submission successful";
+            loginMessageArea.innerText = "Validation successful, waiting for login";
+            updateUserPost(json);
         },
         error: function() {
-            modalMessageUser.innerText = "User submission failed";
+            loginMessageArea.innerText = "Validation failed";
+        }
+    });
+}
+
+function updateUserPost(json) {
+    var localjson = {
+        Email: json.Email,
+        LoginCode: randomString()
+    }
+
+    $.ajax({
+        url: updateUserAPI,
+        type: 'POST',
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        xhrFields: {
+            withCredentials: false
+        },
+        data: JSON.stringify(localjson),
+        timeout: 1500,
+        success: function(response) {
+            console.log(response);
+            setCookie(LOGINCOOKIE, localjson.Email + COOKIEDELIMITER + localjson.LoginCode, 30);
+            setCookie(URLCOOKIE, window.location.href, 999);
+            redirectPage("home");
+            
+        },
+        error: function() {
+            loginMessageArea.innerText = "Updating user entry failed";
         }
     });
 }
@@ -127,28 +158,7 @@ function checkContent(value) {
     }
 }
 
-function setCookie(cname, cvalue, exdays) {
-    var d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    var expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var decodedCookie = decodeURIComponent(document.cookie);
-    var ca = decodedCookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
 
 $.fn.redraw = function(){
   $(this).each(function(){
