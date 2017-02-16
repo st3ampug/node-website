@@ -76,6 +76,14 @@ function elementVisibilityOFF(id) {
     $("#" + id).css('visibility', 'hidden');
 }
 
+function elementDisplayBlock(id) {
+    $("#" + id).css('display', 'block');
+}
+
+function elementDisplayNone(id) {
+    $("#" + id).css('display', 'none');
+}
+
 function redirectPage(page) {
     currurl = window.location.href;
     if(currurl.slice(-1) != "/") {

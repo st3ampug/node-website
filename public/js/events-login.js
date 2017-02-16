@@ -11,6 +11,9 @@ const REGISTERBTN   = "registerButton";
 const REGISTERMSG   = "registerMessage";
 const NAVBARLINKS       = "navbarLinks";
 const CONTAINER         = "container";
+const LOGINSPINNER      = "loginSpinner";
+const LOGINTOP          = "loginTop";
+const LOGINMIDDLE       = "loginMiddle";
 
 var loginEmailField         = document.getElementById(LOGINEMAIL);
 var loginPasswordField      = document.getElementById(LOGINPW);
@@ -20,27 +23,17 @@ var loginMessageArea        = document.getElementById(LOGINMSG);
 // =====================================================================================
 
 // Event Listeners =====================================================================
-//window.onload = function() {
+
 window.addEventListener('load', function(){
     console.log("onload");
 
     elementVisibilityON(CONTAINER);
     elementVisibilityOFF(NAVBARLINKS);
 
-    // passcheck call added to the api server
-    // on load check the pass cookie
-    // pass cookie should have *email*;*passcodething*
-    // if cookie is not present, navigate to the loginButton
-    // if cookie is there, call the passcheck, compare the 2 passes, let the user nav to home if equals
-    // home and admin should check for the cookie with the api call to show info (and navbar links)
-    // inventory and users should just check if the cookie is present
-
-    // when login is needed, use the login call
-    // when all is good, create the cookie with the pass and update the user with the pass
-
     if(loginCookiePresent()) {
         redirectPage("home");
     }
+    loginCookieValidate();
 
     loginButton.addEventListener('click', function() {
         if(validateLoginForm()) {
@@ -92,6 +85,7 @@ function loginApiPost(json) {
         success: function(response) {
             console.log(response);
             loginMessageArea.innerText = "Validation successful, waiting for login";
+            showSpinner();
             updateUserPost(json);
         },
         error: function() {
@@ -129,12 +123,52 @@ function updateUserPost(json) {
     });
 }
 
-function hashMyPassword(pw) {
-    var bcrypt = dcodeIO.bcrypt;
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(pw, salt);
+function loginCookieValidate() {
+    showSpinner();
+    if(loginCookiePresent()) {
+        cookie = getCookie(LOGINCOOKIE).split(COOKIEDELIMITER);
+        var json = {
+            Email: cookie[0]
+        }
 
-    return hash;
+        $.ajax({
+            url: passcheckAPI,
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            xhrFields: {
+                withCredentials: false
+            },
+            data: JSON.stringify(json),
+            timeout: 1500,
+            success: function(response) {
+                console.log("Pass check successful");
+                let json = response;
+                if(typeof(json.LoggedIn) !== 'undefined') {
+                    if (json.LoggedIn === cookie[1]) {
+                        
+                        console.log("GREAT SUCCESS");
+                        redirectPage("home");
+                        
+                        
+                    } else {
+                        console.log("Pass check unsuccessful");
+                        hideSpinner();
+                    }
+                } else {
+                    console.log("Pass check unsuccessful");
+                    hideSpinner();
+                }
+            },
+            error: function() {
+                console.log("Pass check unsuccessful");
+                hideSpinner();
+            }
+        });
+    } else {
+        console.log("Pass check unsuccessful");
+        hideSpinner();
+    }
 }
 
 function validateRegisterForm() {
@@ -158,40 +192,22 @@ function checkContent(value) {
     }
 }
 
-
-
 $.fn.redraw = function(){
   $(this).each(function(){
     var redraw = this.offsetHeight;
   });
 };
 
-function initDataTableDefault(id) {
-    $("#" + id).DataTable();
+function showSpinner() {
+    elementVisibilityOFF(LOGINTOP);
+    elementDisplayNone(LOGINMIDDLE);
+    elementDisplayBlock(LOGINSPINNER);
 }
 
-function initDataTableMinimal(id) {
-    $("#" + id).DataTable({
-        "paging":   false,
-        "ordering": true,
-        "info":     false
-    });
-}
-
-function initDataTableMedium(id) {
-    $("#" + id).DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     false
-    });
-}
-
-function initDataTableMaximum(id) {
-    $("#" + id).DataTable({
-        "paging":   true,
-        "ordering": true,
-        "info":     true
-    });
+function hideSpinner() {
+    elementVisibilityON(LOGINTOP);
+    elementDisplayBlock(LOGINMIDDLE);
+    elementDisplayNone(LOGINSPINNER);
 }
 
 // =====================================================================================

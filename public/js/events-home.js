@@ -35,6 +35,7 @@ window.addEventListener('load', function(){
     // read cookie
     loginCookieValidate();
 
+    checkUserCookie();
     setUserButtonText(saveduser);
     changeAssignState(ASSIGNBUTTON);
     changeReturnState(RETURNBUTTON);
@@ -51,19 +52,11 @@ window.addEventListener('load', function(){
         assignAction(ASSIGNBUTTON, usersbutton.getAttribute("name"));
         e.preventDefault();
     });
-    // assignbutton.addEventListener("touchstart", function(e) {
-    //     assignAction(ASSIGNBUTTON, usersbutton.getAttribute("name"));
-    //     e.preventDefault();
-    // });
 
     returnbutton.addEventListener("click", function(e) {
         assignAction(RETURNBUTTON, CHARGING);
         e.preventDefault();
     });
-    // returnbutton.addEventListener("touchstart", function() {
-    //     assignAction(RETURNBUTTON, CHARGING);
-    //     e.preventDefault();
-    // });
 
     dropdown.addEventListener('click', function(ev) {
         if (ev.target !== ev.currentTarget) {

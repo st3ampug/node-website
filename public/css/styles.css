@@ -15,8 +15,18 @@ tr[selected='selected'] {
     margin-bottom: 10px;
 }
 
-#navbarLinks, #container {
+#navbarLinks, #container{
     visibility: hidden;
+}
+
+#loginSpinner {
+    display: none;
+}
+
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 body {
