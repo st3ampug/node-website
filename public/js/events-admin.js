@@ -146,7 +146,7 @@ function validateUserModalForm() {
 function submitNewUser() {
     var userJson = {
         Name: modalUserName.value,
-        Email: modalUserEmail.value,
+        Email: modalUserEmail.value.toLowerCase(),
         State: "active",
         LoggedIn: "-"
     };

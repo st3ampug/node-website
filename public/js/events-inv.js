@@ -54,7 +54,7 @@ window.addEventListener('load', function(){
 function loginCookieCheck() {
     if(loginCookiePresent()) {
         elementVisibilityON(NAVBARLINKS);
-        //elementVisibilityON(CONCTAINER);
+        //elementVisibilityON(CONTAINER);
     }
 }
 

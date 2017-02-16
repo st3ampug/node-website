@@ -30,15 +30,15 @@ window.addEventListener('load', function(){
     elementVisibilityON(CONTAINER);
     elementVisibilityOFF(NAVBARLINKS);
 
-    if(loginCookiePresent()) {
-        redirectPage("home");
-    }
+    // if(loginCookiePresent()) {
+    //     redirectPage("home");
+    // }
     loginCookieValidate();
 
     loginButton.addEventListener('click', function() {
         if(validateLoginForm()) {
             var userJson = {
-                Email: loginEmailField.value,
+                Email: loginEmailField.value.toLowerCase(),
                 Secret: loginPasswordField.value
             };
             loginApiPost(userJson);
@@ -84,9 +84,17 @@ function loginApiPost(json) {
         timeout: 1500,
         success: function(response) {
             console.log(response);
-            loginMessageArea.innerText = "Validation successful, waiting for login";
-            showSpinner();
-            updateUserPost(json);
+            if( Object.prototype.toString.call( response ) === '[object Array]' ) {
+                if(response.length > 0) {
+                    loginMessageArea.innerText = "Validation successful, waiting for login";
+                    showSpinner();
+                    updateUserPost(json);
+                } else {
+                    loginMessageArea.innerText = "Validation failed";
+                }
+            } else {
+                loginMessageArea.innerText = "Validation failed";
+            }
         },
         error: function() {
             loginMessageArea.innerText = "Validation failed";
@@ -96,7 +104,7 @@ function loginApiPost(json) {
 
 function updateUserPost(json) {
     var localjson = {
-        Email: json.Email,
+        Email: json.Email.toLowerCase(),
         LoginCode: randomString()
     }
 
