@@ -33,6 +33,18 @@ window.addEventListener('load', function(){
     setCookie(URLCOOKIE, window.location.href, 999);
     loginCookieValidate();
 
+    window.addEventListener("keypress", function(e) {
+        if(e.which == 13) {
+            if(validateLoginForm()) {
+                var userJson = {
+                    Email: loginEmailField.value.toLowerCase(),
+                    Secret: loginPasswordField.value
+                };
+                loginApiPost(userJson);
+            }
+        }
+    });
+
     loginButton.addEventListener('click', function() {
         if(validateLoginForm()) {
             var userJson = {
