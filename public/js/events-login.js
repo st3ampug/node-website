@@ -30,9 +30,7 @@ window.addEventListener('load', function(){
     elementVisibilityON(CONTAINER);
     elementVisibilityOFF(NAVBARLINKS);
 
-    // if(loginCookiePresent()) {
-    //     redirectPage("home");
-    // }
+    setCookie(URLCOOKIE, window.location.href, 999);
     loginCookieValidate();
 
     loginButton.addEventListener('click', function() {
@@ -121,7 +119,6 @@ function updateUserPost(json) {
         success: function(response) {
             console.log(response);
             setCookie(LOGINCOOKIE, localjson.Email + COOKIEDELIMITER + localjson.LoginCode, 30);
-            setCookie(URLCOOKIE, window.location.href, 999);
             redirectPage("home");
             
         },
