@@ -214,6 +214,16 @@ function submitNewDevice() {
         success: function(response) {
             console.log(response);
             modalMessageDevice.innerText = "Device submission successful";
+            
+            modalDeviceName.value = "";
+            modalDeviceSerial.value = "";
+            modalDeviceOSType.value = "";
+            modalDeviceOSVersion.value = "";
+            modalDeviceImei.value = "";
+            modalDeviceMACAddr.value = "";
+            modalDeviceModel.value = "";
+            modalDeviceOwner.value = "";
+            modalDeviceNotes.value = "";
         },
         error: function() {
             modalMessageDevice.innerText = "Device submission failed";
